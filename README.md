@@ -8,9 +8,7 @@ Originally, the function modified the input in place, leading to errors in the t
 
 ## Question 2
 
-This solution uses python's built-in sorting to quickly find the biggest possible loss in one transaction. First, the list of prices is ordered, and a second list is created whose elements are tuples consisting of the prices in order and their index in the original list. Hence, the list can be thought of as ordered from "worst sell price" to "worst buy price". We then iterate through the "sell prices" and compare each one to each "buy price" in order - if the index of the buy price is smaller than the index of the sell price, we know we have found the biggest loss because the list is ordered, and we can exit the loop.
-
-In the worst case, this solution is actually O(n^2) - where pricesLst is already sorted in ascending order, the function would have to iterate through every element of the input twice for each element. However, for highly randomized lists, this is much faster than my "v1" solution (can be seen in commit history), which was O(n^2 - n). For example, the test cases given took somewhere in the region of 0.5-0.6s to run for v1, as opposed to less than 0.1s for v2. So amusingly, the first version is actually marginally faster in the worst case - but the worst case is rare and the second version is faster in almost every other case.
+This solution is fairly straightforward. For each price in the list, we calculate the loss for that buy price and every subsequent sell price. We keep track of the biggest loss so far and replace it if it is exceeded - ditto for the indexes of the prices comprising the transaction with the highest loss. After getting through all the prices, we have the highest possible loss (as a negative number) and the indexes of the prices that produced it. We round the biggest loss to 2 decimal places (because it is a price difference) and multiply it by negative one to make it positive, and we are done.
 
 ## Question 3
 

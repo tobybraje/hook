@@ -1,39 +1,22 @@
 def get_largest_possible_loss(pricesLst: list[float]) -> dict:
+    current_loss = 0
+    index_1 = None
+    index_2 = None
     try:
-        biggest_loss = 0
-        index_1 = None
-        index_2 = None
+        for price in pricesLst:
+            for next_price in pricesLst[pricesLst.index(price) + 1 :]:
+                loss = next_price - price
+                if loss < current_loss:
+                    current_loss = loss
+                    index_1 = pricesLst.index(price)
+                    index_2 = pricesLst.index(next_price)
 
-        pricesLstSorted = sorted(pricesLst)
+        biggest_loss = round(-current_loss, 2)
 
-        pricesAndIndexes = [
-            (price, pricesLst.index(price)) for price in pricesLstSorted
-        ]
-
-        for sell_price_tuple in pricesAndIndexes:
-            sell_price = sell_price_tuple[0]
-            index_2 = sell_price_tuple[1]
-
-            for buy_price_tuple in reversed(pricesAndIndexes):
-                if buy_price_tuple[1] < index_2:
-                    biggest_loss = buy_price_tuple[0] - sell_price
-                    index_1 = buy_price_tuple[1]
-                    break
-            else:
-                continue
-            break
-
-        if biggest_loss < 0:
-            biggest_loss = 0
-            index_1 = None
-            index_2 = None
-
-        return_dict = {
-            "Biggest Loss": round(biggest_loss, 2),
+        return {
+            "Biggest Loss": biggest_loss,
             "Index 1": index_1,
             "Index 2": index_2,
         }
-
-        return return_dict
     except TypeError:
         return {"Error": "The supplied prices are of the wrong type"}
